@@ -1,0 +1,25 @@
+{
+    "name": "kmj/sync",
+    "type": "symfony-bundle",
+    "description": "Bundle that handles the synchronization between a production site and test/development servers",
+    "keywords": ["KMJ", "sync", "synchronization"],
+    "homepage": "http://github.com/Demoboy/SyncBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kaelin Jacobson",
+            "email": "kaelinjacobson@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "symfony/framework-bundle": ">=2.0,<2.2-dev"
+    },
+    "autoload": {
+        "psr-0": { "KMJ\\SyncBundle": "" }
+    },
+    "minimum-stability": "dev",
+    "target-dir": "KMJ/SyncBundle"
+}
