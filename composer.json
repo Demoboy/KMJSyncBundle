@@ -1,7 +1,7 @@
 {
-    "name": "kmj/sync",
+    "name": "kmj/syncbundle",
     "type": "symfony-bundle",
-    "description": "Bundle that handles the synchronization between a production site and test/development servers",
+    "description": "Symfony2 Bundle that handles the synchronization between a production site and test/development servers",
     "keywords": ["KMJ", "sync", "synchronization"],
     "homepage": "http://github.com/Demoboy/SyncBundle",
     "license": "MIT",
