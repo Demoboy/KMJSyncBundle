@@ -7,13 +7,13 @@ This bundle comes with a few configuration options.
 api_syncing:
    dir:                 #The working directory for the bundle, no data is stored here. Defaults to %kernel.root_dir%/cache/sync
    backups:             #The directory to store all the backups. Defaults to %kernel.root_dir%/Resources/backups
-   compression: tar     #The compression method to be used for the backup files. Only supported one at the moment is tar
-   numberofbackups: 3   #The number of backups to keep
-   paths:               #Array of directories to compress
-      - path: %kernel.root_dir%/../web/uploads
-   
-
+   compression:         #The compression method to be used for the backup files. Only supported one at the moment is tar
+   numberofbackups:     #The number of backups to keep Defaults to 3
+  
    ## ALL OF THESE ARE REQUIRED ##
+
+paths:                  #Array of directories to compress
+      - path:           #The path for the folder to be backed up. Example:%kernel.root_dir%/../web/uploads
 
    database:            #Production database credentials
       type: mysql       #Mysql is the only supported type
