@@ -46,7 +46,7 @@ class CreateBackupCommand extends ContainerAwareCommand {
         $output->writeln("<info>Compressing backup folder</info>");
 
         //create tar file        
-        $tarFile = $sync->getCurrentBackupFolder() . '/' . date('Y-m-d H:i:s') . ".tar";
+        $tarFile = $sync->getCurrentBackupFolder() . '/' . date('Y-m-d_H:i:s') . ".tar";
 
         //add sql file to tar
         $createArchive = new Process("cd {$sync->getCurrentBackupFolder()} && tar -cf {$tarFile} export.sql");
@@ -85,8 +85,8 @@ class CreateBackupCommand extends ContainerAwareCommand {
         $cleanUp = new Process("rm -rf {$sync->getCurrentBackupFolder()}");
         $cleanUp->run();
                 
-        $backupCleaner = $this->getApplication()->find('kmj:sync:clean');
-        $backupCleaner->run(new ArrayInput(array('')), $output);
+        $backupCleaner = $this->getApplication()->find('api:sync:clean');
+        $backupCleaner->run(new ArrayInput(array()), $output);
     }
 }
 ?>
