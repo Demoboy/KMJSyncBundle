@@ -32,8 +32,8 @@ class SyncCommand extends ContainerAwareCommand {
         $output->writeln("<info>Determining last backup date");
 
         //get the most recent backup on the server call 
-        //change the directory to the path var and execute api:sync:last command and read input
-        $backupFilePath = new Process("ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'cd {$sync->getSSHPath()} && app/console --env=prod api:sync:last'");
+        //change the directory to the path var and execute kmj:sync:last command and read input
+        $backupFilePath = new Process("ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'cd {$sync->getSSHPath()} && app/console --env=prod kmj:sync:last'");
         $backupFilePath->run();
 
         if (!$backupFilePath->isSuccessful()) {
