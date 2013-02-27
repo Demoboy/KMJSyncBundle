@@ -63,7 +63,7 @@ class SyncCommand extends ContainerAwareCommand {
             return;
         }
 
-        $extract = new Process("cd {$sync->getCurrentBackupFolder()} && mkdir backup && tar -C backup/ -zxf *.tar");
+        $extract = new Process("cd {$sync->getCurrentBackupFolder()} && mkdir backup && tar -C backup/ -xf *.tar");
         $extract->setTimeout(3600);
         $extract->run();
         //dump current database
