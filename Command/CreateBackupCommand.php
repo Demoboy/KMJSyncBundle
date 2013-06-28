@@ -9,9 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 /**
- * Description of CreateBackupCommand
- *
- * @author kaelinjacobson
+ * @KMJ\CronBundle\Annotations\CronJob(minute="0", hour="0", env="prod")
  */
 class CreateBackupCommand extends ContainerAwareCommand {
 
