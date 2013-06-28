@@ -61,10 +61,6 @@ class Configuration implements ConfigurationInterface {
                                 ->isRequired()
                                 ->cannotBeEmpty()
                             ->end()
-                            ->scalarNode('password')
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
                             ->scalarNode('path')
                                 ->isRequired()
                                 ->cannotBeEmpty()
@@ -98,12 +94,6 @@ class Configuration implements ConfigurationInterface {
                             ->end()
                         ->end()
                     ->end();
-        
-        /**
-         *  database: ghostarm_symfony
-      user:     ghostarm_symfony
-      password: Pvd+wo#d$~6y
-         */
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
