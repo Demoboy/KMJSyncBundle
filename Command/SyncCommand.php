@@ -51,7 +51,7 @@ class SyncCommand extends ContainerAwareCommand {
         }
 
         $output->writeln("<info>Downloading payload");
-
+        
         $copyFile = new Process("scp -P {$sync->getSSHPort()} {$sync->getSSHUserName()}@{$sync->getSSHHost()}:{$file} {$sync->createBackupDir()}/backup.tar");
         $copyFile->setTimeout(3600);
         $copyFile->run();
@@ -77,7 +77,7 @@ class SyncCommand extends ContainerAwareCommand {
 
         $output->writeln("<info>Removing database");
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $tool = new SchemaTool($em);
         $tool->dropDatabase();
 
