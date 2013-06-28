@@ -85,8 +85,7 @@ class CreateBackupCommand extends ContainerAwareCommand {
         $cleanUp = new Process("rm -rf {$sync->getCurrentBackupFolder()}");
         $cleanUp->run();
                 
-        $backupCleaner = $this->getApplication()->find('api:sync:clean');
-        $backupCleaner->run(new ArrayInput(array()), $output);
+        $backupCleaner = $this->getApplication()->find('kmj:sync:clean');
+        $backupCleaner->run(new ArrayInput(array("backups" => $sync->getNumberOfBackupsToKeep())), $output);
     }
 }
-?>
