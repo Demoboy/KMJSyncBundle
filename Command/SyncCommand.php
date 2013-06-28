@@ -1,4 +1,5 @@
 <?php
+
 namespace KMJ\SyncBundle\Command;
 
 use Doctrine\ORM\Tools\SchemaTool;
@@ -7,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
-
 
 /**
  * Description of CreateBackupCommand
@@ -49,9 +49,11 @@ class SyncCommand extends ContainerAwareCommand {
             $output->writeln('<error>Backups have not been completed');
             return;
         }
-
-        $output->writeln("<info>Downloading payload");
         
+        $lastBackupDate = new \DateTime(str_replace("_", " ", substr(basename($file), 0, -4)));
+        $output->writeln("<info>Last backup date was {$lastBackupDate->format("Y-m-d")} at {$lastBackupDate->format("g:i:s")}");
+        $output->writeln("<info>Downloading payload");
+
         $copyFile = new Process("scp -P {$sync->getSSHPort()} {$sync->getSSHUserName()}@{$sync->getSSHHost()}:{$file} {$sync->createBackupDir()}/backup.tar");
         $copyFile->setTimeout(3600);
         $copyFile->run();
@@ -127,5 +129,5 @@ class SyncCommand extends ContainerAwareCommand {
         $cleanUp = new Process("rm -rf {$sync->getCurrentBackupFolder()}");
         $cleanUp->run();
     }
+
 }
-?>
