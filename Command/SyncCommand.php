@@ -51,31 +51,30 @@ class SyncCommand extends ContainerAwareCommand {
             return;
         }
 
-        $lastBackupDate = new \DateTime(str_replace("_", " ", substr(basename($file), 0, -4)));
+        $lastBackupDate = new \DateTime();
+        $lastBackupDate->setTimestamp(substr(basename($file), 0, -4));
         $output->writeln("<info>Last backup date was {$lastBackupDate->format("Y-m-d")} at {$lastBackupDate->format("g:i:s")}");
-        
+
         $output->writeln("<info>Downloading payload");
 
         if ($input->getOption('db-only')) {
             $output->writeln("<info>Downloading the database only");
 
-            echo "ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'tar -xOf {$file} export.sql'";
-            die();
-            
             $exportFile = new Process("ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'tar -xOf {$file} export.sql'");
             $exportFile->setTimeout(3600);
             $exportFile->run();
-            
-            
-            print_r($exportFile->getOutput());
-            die();
 
+            //save output into sql file
             $this->removeDB($output);
 
-            $mysqlImportProcess = new Process("mysql -h {$sync->getDatabaseHost()} --user={$sync->getDatabaseUser()} --password='{$sync->getDatabasePassword()}' {$sync->getDatabaseName()} -e \"{$exportFile->getOutput()}\"");
+            $output->writeln("<info>Importing database");
+            
+            file_put_contents($sync->createBackupDir()."/export.sql", $exportFile->getOutput());
+
+            $mysqlImportProcess = new Process("mysql -h {$sync->getDatabaseHost()} --user={$sync->getDatabaseUser()} --password='{$sync->getDatabasePassword()}' {$sync->getDatabaseName()} < {$sync->getCurrentBackupFolder()}/export.sql");
             $mysqlImportProcess->setTimeout(3600);
             $mysqlImportProcess->run();
-            
+
             $output->writeln("<info>Database was imported");
             return;
         }
