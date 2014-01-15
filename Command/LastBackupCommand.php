@@ -50,5 +50,3 @@ class LastBackupCommand extends ContainerAwareCommand {
     }
 
 }
-
-?>

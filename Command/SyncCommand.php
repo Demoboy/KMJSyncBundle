@@ -18,6 +18,7 @@ class SyncCommand extends ContainerAwareCommand {
 
     protected function configure() {
         $this->setName('kmj:sync:sync')
+                ->addOption('db-only', null, \Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Grabs only the database of the server instead of downloading all the files')
                 ->setDescription('Syncs the current server with the production server');
     }
 
@@ -49,10 +50,35 @@ class SyncCommand extends ContainerAwareCommand {
             $output->writeln('<error>Backups have not been completed');
             return;
         }
-        
+
         $lastBackupDate = new \DateTime(str_replace("_", " ", substr(basename($file), 0, -4)));
         $output->writeln("<info>Last backup date was {$lastBackupDate->format("Y-m-d")} at {$lastBackupDate->format("g:i:s")}");
+        
         $output->writeln("<info>Downloading payload");
+
+        if ($input->getOption('db-only')) {
+            $output->writeln("<info>Downloading the database only");
+
+            echo "ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'tar -xOf {$file} export.sql'";
+            die();
+            
+            $exportFile = new Process("ssh {$sync->getSSHUserName()}@{$sync->getSSHHost()} -p {$sync->getSSHPort()} 'tar -xOf {$file} export.sql'");
+            $exportFile->setTimeout(3600);
+            $exportFile->run();
+            
+            
+            print_r($exportFile->getOutput());
+            die();
+
+            $this->removeDB($output);
+
+            $mysqlImportProcess = new Process("mysql -h {$sync->getDatabaseHost()} --user={$sync->getDatabaseUser()} --password='{$sync->getDatabasePassword()}' {$sync->getDatabaseName()} -e \"{$exportFile->getOutput()}\"");
+            $mysqlImportProcess->setTimeout(3600);
+            $mysqlImportProcess->run();
+            
+            $output->writeln("<info>Database was imported");
+            return;
+        }
 
         $copyFile = new Process("scp -P {$sync->getSSHPort()} {$sync->getSSHUserName()}@{$sync->getSSHHost()}:{$file} {$sync->createBackupDir()}/backup.tar");
         $copyFile->setTimeout(3600);
@@ -77,12 +103,7 @@ class SyncCommand extends ContainerAwareCommand {
             return;
         }
 
-        $output->writeln("<info>Removing database");
-
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $tool = new SchemaTool($em);
-        $tool->dropDatabase();
-
+        $this->removeDB($output);
 
         $output->writeln("<info>Importing database");
 
@@ -128,6 +149,14 @@ class SyncCommand extends ContainerAwareCommand {
 
         $cleanUp = new Process("rm -rf {$sync->getCurrentBackupFolder()}");
         $cleanUp->run();
+    }
+
+    function removeDB(&$output) {
+        $output->writeln("<info>Removing database");
+
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $tool = new SchemaTool($em);
+        $tool->dropDatabase();
     }
 
 }
