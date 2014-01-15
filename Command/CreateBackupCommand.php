@@ -23,7 +23,7 @@ class CreateBackupCommand extends ContainerAwareCommand {
             $output->writeln('<error>Cannot create a backup from a non-production environment');
             return;
         }
-        
+
         // create dump of mysql database and place in cache folder
         $sync = $this->getContainer()->get('sync');
 
@@ -44,7 +44,7 @@ class CreateBackupCommand extends ContainerAwareCommand {
         $output->writeln("<info>Compressing backup folder</info>");
 
         //create tar file        
-        $tarFile = $sync->getCurrentBackupFolder() . '/' . date('Y-m-d_H:i:s') . ".tar";
+        $tarFile = $sync->getCurrentBackupFolder() . '/' . time() . ".tar";
 
         //add sql file to tar
         $createArchive = new Process("cd {$sync->getCurrentBackupFolder()} && tar -cf {$tarFile} export.sql");

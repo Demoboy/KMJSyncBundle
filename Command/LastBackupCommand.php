@@ -33,8 +33,8 @@ class LastBackupCommand extends ContainerAwareCommand {
         foreach ($backups as $backup) {
             if (substr($backup, -3) == "tar") {
                 $backup = str_replace("_", " ", $backup);
-                $currentTime = strtotime(substr($backup, 0, -4));
-                if ($currentTime != 0) {
+                $currentTime = substr($backup, 0, -4);
+                if ($currentTime != 0 && is_numeric($currentTime)) {
                     if ($currentTime > $recentTime) {
                         $recentTime = $currentTime;
                     }
@@ -45,7 +45,7 @@ class LastBackupCommand extends ContainerAwareCommand {
         if ($recentTime == null) {
             $output->writeln("<error>No backups are available");
         } else {
-            $output->writeln($sync->getBackupDir()."/".date('Y-m-d_H:i:s', $recentTime).".tar");
+            $output->writeln($sync->getBackupDir()."/".$recentTime.".tar");
         }
     }
 
