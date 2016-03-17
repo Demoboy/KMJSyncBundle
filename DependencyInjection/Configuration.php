@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface {
                         ->cannotBeEmpty()
                     ->end()
                     ->scalarNode('console_path')
-                        ->defaultValue("%kernel.root_dir%/console")
+                        ->defaultValue("app/console")
                         ->cannotBeEmpty()
                     ->end()
                     ->scalarNode('compression')
