@@ -37,6 +37,10 @@ class SyncService {
 
         return $this->currentFolder;
     }
+    
+    public function getConsolePath() {
+        return $this->config['console_path'];
+    }
 
     public function getCurrentBackupFolder() {
         return $this->currentFolder;
@@ -114,5 +118,3 @@ class SyncService {
     }
 
 }
-
-?>

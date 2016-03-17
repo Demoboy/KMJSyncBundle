@@ -58,4 +58,3 @@ class CleanBackupCommand extends ContainerAwareCommand {
         $output->writeln("<info>{$numRemoved} Backups removed");
     } 
 }
-?>
