@@ -18,8 +18,6 @@
         "symfony/framework-bundle": ">=2.0"
     },
     "autoload": {
-        "psr-0": { "KMJ\\SyncBundle": "" }
-    },
-    "minimum-stability": "dev",
-    "target-dir": "KMJ/SyncBundle"
+        "psr-4": { "KMJ\\SyncBundle\\": "" }
+    }
 }
